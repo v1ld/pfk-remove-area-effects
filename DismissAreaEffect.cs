@@ -63,7 +63,7 @@ namespace DismissAreaEffect
               area => !Game.Instance.Player.MainCharacter.Value.IsInCombat && IsAreaEffectSpell(area) && CanDismiss(area));
 
         public string GetReason() =>
-            Game.Instance.Player.MainCharacter.Value.IsInCombat ? $"Cannot dismiss area effects in combat." : $"No area effects to dismiss.";
+            Game.Instance.Player.MainCharacter.Value.IsInCombat ? "Cannot dismiss area effects in combat." : "No area effects to dismiss.";
 
         internal static void EndTargetAreaEffect(UnitEntityData caster, TargetWrapper target)
         {
@@ -91,6 +91,7 @@ namespace DismissAreaEffect
             "4c695315962bf9a4ea7fc7e2bb3e2f60", // Ice Storm
             "6b2b1ba6ec6487f46b8c76b603abba6b", // Ice Storm (shadow)
             "e09010a73354a794293ebc7b33c2d130", // Obscuring Mist
+            "d64b08ae01012e34cbc55b3a27ea29b7", // Obsidian Flow
             "b21bc337e2beaa74b8823570cd45d6dd", // Sirocco
             "bb87c7513a16b9a44b4948a4e932a81b", // Sirocco (shadow)
             "16e0e4c6a16f68c49832340b93706499", // Spike Growth
