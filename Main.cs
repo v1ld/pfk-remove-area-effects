@@ -3,19 +3,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Kingmaker;
 using Kingmaker.Blueprints;
-using Kingmaker.Blueprints.Root;
-using Kingmaker.UI.Common.Animations;
-using Kingmaker.UI.LevelUp;
+using Kingmaker.GameModes;
 using Kingmaker.Utility;
 using UnityEngine;
 using UnityModManagerNet;
@@ -45,6 +38,28 @@ namespace DismissAreaEffect
                 SafeLoad(SaveCompatibility.CheckCompat, "Check save game compatibility");
                 Log.Write("Load finished.");
 #endif
+            }
+        }
+
+        [Harmony12.HarmonyPatch(typeof(UnityModManager.UI), "Update")]
+        internal static class UnityModManager_UI_Update_Patch
+        {
+            private static void Postfix(UnityModManager.UI __instance)
+            {
+                try
+                {
+                    if (Game.Instance.CurrentMode == GameModeType.Default || Game.Instance.CurrentMode == GameModeType.Pause)
+                    {
+                        if (Input.GetKeyUp("l"))
+                        {
+                            Log.Write("Read key!");
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                  Log.Write($"Key read: {e}");
+                }
             }
         }
 
@@ -152,6 +167,11 @@ namespace DismissAreaEffect
             {
                 // If we can't patch this, nothing will work, so want the mod to turn red in UMM.
                 throw Error("Failed to patch LibraryScriptableObject.LoadDictionary(), cannot load mod");
+            }
+            if (!ApplyPatch(typeof(UnityModManager_UI_Update_Patch), "Key bindings"))
+            {
+                // If we can't patch this, nothing will work, so want the mod to turn red in UMM.
+                throw Error("Failed to patch UnityModManager.UI.Update(), cannot load mod");
             }
             return true;
         }
