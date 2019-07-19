@@ -23,7 +23,7 @@ namespace DismissAreaEffect
     }
 
     // Provides an option to dismiss dismissible area effects.
-    class AreaEffectDismissal : ISceneHandler
+    class AreaEffectDismissal : ISceneHandler, IPartyHandler
     {
         readonly BlueprintAbility dismiss;
 
@@ -43,45 +43,63 @@ namespace DismissAreaEffect
             dismiss.CanTargetPoint = true;
         }
 
+        private void addDismissAbility(UnitEntityData unit)
+        {
+            if (!unit.Descriptor.IsPet && !unit.Descriptor.HasFact(dismiss))
+            {
+                unit.Descriptor.AddFact(dismiss);
+            }
+        }
+
         void ISceneHandler.OnAreaDidLoad()
         {
-            if (!Game.Instance.Player.MainCharacter.Value.Descriptor.HasFact(dismiss)) {
-                Game.Instance.Player.MainCharacter.Value.Descriptor.AddFact(dismiss);
+            foreach (var character in Game.Instance.Player.PartyCharacters)
+            {
+                addDismissAbility(character);
             }
         }
 
         void ISceneHandler.OnAreaBeginUnloading() { }
+
+        void IPartyHandler.HandleAddCompanion(UnitEntityData unit)
+        {
+            addDismissAbility(unit);
+        }
+
+        void IPartyHandler.HandleCompanionActivated(UnitEntityData unit) { }
+
+        void IPartyHandler.HandleCompanionRemoved(UnitEntityData unit) { }
   }
 
     public class DismissAreaEffectLogic : GameLogicComponent, IAbilityTargetChecker, IAbilityAvailabilityProvider
     {
         public bool CanTarget(UnitEntityData caster, TargetWrapper target) =>
-            GetTargetAreaEffect(target) != null;
+            GetTargetAreaEffect(caster, target) != null;
 
         public bool IsAvailableFor(AbilityData ability) =>
             Game.Instance.State.AreaEffects.Any(
-              area => !Game.Instance.Player.MainCharacter.Value.IsInCombat && IsAreaEffectSpell(area) && CanDismiss(area));
+              area => !ability.Caster.Unit.IsInCombat && IsAreaEffectSpell(area) && CanDismiss(ability.Caster.Unit, area));
 
         public string GetReason() =>
             Game.Instance.Player.MainCharacter.Value.IsInCombat ? "Cannot dismiss area effects in combat." : "No area effects to dismiss.";
 
         internal static void EndTargetAreaEffect(UnitEntityData caster, TargetWrapper target)
         {
-            var area = GetTargetAreaEffect(target);
+            var area = GetTargetAreaEffect(caster, target);
             if (area == null) return;
 
             area.ForceEnd();
         }
 
-        internal static AreaEffectEntityData GetTargetAreaEffect(TargetWrapper target) =>
+        internal static AreaEffectEntityData GetTargetAreaEffect(UnitEntityData caster, TargetWrapper target) =>
             Game.Instance.State.AreaEffects.FirstOrDefault(
-              area => IsAreaEffectSpell(area) && CanDismiss(area) && area.View.Shape.Contains(target.Point));
+              area => IsAreaEffectSpell(area) && CanDismiss(caster, area) && area.View.Shape.Contains(target.Point));
 
         internal static bool IsAreaEffectSpell(AreaEffectEntityData area) =>
             area.Blueprint.AffectEnemies && area.Context.SourceAbility?.Type == AbilityType.Spell;
 
-        internal static bool CanDismiss(AreaEffectEntityData area) =>
-            !Game.Instance.Player.MainCharacter.Value.IsInCombat || dismissibleAreas.Contains(area.Blueprint.AssetGuid);
+        internal static bool CanDismiss(UnitEntityData caster, AreaEffectEntityData area) =>
+            !caster.IsInCombat || dismissibleAreas.Contains(area.Blueprint.AssetGuid);
 
         static readonly HashSet<string> dismissibleAreas = new HashSet<string> {
             "cae4347a512809e4388fb3949dc0bc67", // Blade Barrier
