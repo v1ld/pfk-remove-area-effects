@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Kingmaker;
 using Kingmaker.Blueprints;
+using Kingmaker.Blueprints.Root.Strings.GameLog;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.PubSubSystem;
 using Kingmaker.UnitLogic;
@@ -14,92 +15,36 @@ using static Kingmaker.UnitLogic.Commands.Base.UnitCommand;
 
 namespace DismissAreaEffect
 {
-  static class DismissAreaEffect
+    class AreaEffectDismissal
     {
-        internal static void Load()
+        public static void DismissAreaEffects()
         {
-            EventBus.Subscribe(new AreaEffectDismissal());
-        }
-    }
-
-    // Provides an option to dismiss dismissible area effects.
-    class AreaEffectDismissal : ISceneHandler, IPartyHandler
-    {
-        readonly BlueprintAbility dismiss;
-
-        public AreaEffectDismissal()
-        {
-            dismiss = Helpers.CreateAbility("DismissAreaEffect", "Dismiss Area Effect",
-                "Dismiss an area effect when you are out of combat. You must be within range of the effect. Dismissing an area effect is a standard action that does not provoke attacks of opportunity.\n" +
-                "(If this ability is enabled, it means there is a currently active area effect that can be dismissed.)",
-                "0346A8E1E7DB985F9D789CF46778B147",
-                Helpers.GetIcon("95f7cdcec94e293489a85afdf5af1fd7"), // dismissal
-                AbilityType.Extraordinary, // (Ex) so it doesn't provoke an attack of opportunity, and works w/ antimagic field.
-                CommandType.Standard,
-                AbilityRange.Long, // Note: should be the spell range, but this should be good enough.
-                "", "",
-                Helpers.Create<DismissAreaEffectLogic>(),
-                Helpers.CreateRunActions(Helpers.Create<DismissAreaEffectAction>()));
-            dismiss.CanTargetPoint = true;
-        }
-
-        private void addDismissAbility(UnitEntityData unit)
-        {
-            if (!unit.Descriptor.IsPet && !unit.Descriptor.HasFact(dismiss))
+            if (Game.Instance.Player.IsInCombat)
             {
-                unit.Descriptor.AddFact(dismiss);
+                NotifyPlayer("Cannot dismiss area effects in combat.");
+                return;
             }
-        }
 
-        void ISceneHandler.OnAreaDidLoad()
-        {
-            foreach (var character in Game.Instance.Player.PartyCharacters)
+            var areaEffects = Game.Instance.State.AreaEffects.Where(area => IsAreaEffectSpell(area) && CanDismiss(area));
+            if (areaEffects.Count() == 0)
             {
-                addDismissAbility(character);
+                NotifyPlayer("No area effects to dismiss.");
+                return;
             }
+
+            int count = 0;
+            foreach (var area in areaEffects)
+            {
+                area.ForceEnd();
+                count++;
+            }
+            NotifyPlayer($"Dismissed {count} area effect" + (count == 1 ? "" : "s") + ".");
         }
-
-        void ISceneHandler.OnAreaBeginUnloading() { }
-
-        void IPartyHandler.HandleAddCompanion(UnitEntityData unit)
-        {
-            addDismissAbility(unit);
-        }
-
-        void IPartyHandler.HandleCompanionActivated(UnitEntityData unit) { }
-
-        void IPartyHandler.HandleCompanionRemoved(UnitEntityData unit) { }
-  }
-
-    public class DismissAreaEffectLogic : GameLogicComponent, IAbilityTargetChecker, IAbilityAvailabilityProvider
-    {
-        public bool CanTarget(UnitEntityData caster, TargetWrapper target) =>
-            GetTargetAreaEffect(caster, target) != null;
-
-        public bool IsAvailableFor(AbilityData ability) =>
-            Game.Instance.State.AreaEffects.Any(
-              area => !ability.Caster.Unit.IsInCombat && IsAreaEffectSpell(area) && CanDismiss(ability.Caster.Unit, area));
-
-        public string GetReason() =>
-            Game.Instance.Player.MainCharacter.Value.IsInCombat ? "Cannot dismiss area effects in combat." : "No area effects to dismiss.";
-
-        internal static void EndTargetAreaEffect(UnitEntityData caster, TargetWrapper target)
-        {
-            var area = GetTargetAreaEffect(caster, target);
-            if (area == null) return;
-
-            area.ForceEnd();
-        }
-
-        internal static AreaEffectEntityData GetTargetAreaEffect(UnitEntityData caster, TargetWrapper target) =>
-            Game.Instance.State.AreaEffects.FirstOrDefault(
-              area => IsAreaEffectSpell(area) && CanDismiss(caster, area) && area.View.Shape.Contains(target.Point));
-
-        internal static bool IsAreaEffectSpell(AreaEffectEntityData area) =>
+        static bool IsAreaEffectSpell(AreaEffectEntityData area) =>
             area.Blueprint.AffectEnemies && area.Context.SourceAbility?.Type == AbilityType.Spell;
 
-        internal static bool CanDismiss(UnitEntityData caster, AreaEffectEntityData area) =>
-            !caster.IsInCombat || dismissibleAreas.Contains(area.Blueprint.AssetGuid);
+        internal static bool CanDismiss(AreaEffectEntityData area) =>
+            dismissibleAreas.Contains(area.Blueprint.AssetGuid);
 
         static readonly HashSet<string> dismissibleAreas = new HashSet<string> {
             "cae4347a512809e4388fb3949dc0bc67", // Blade Barrier
@@ -117,18 +62,13 @@ namespace DismissAreaEffect
             "1f45c8b0a735097439a9dac04f5b0161", // Volcanic Storm (shadow)
             "fd323c05f76390749a8555b13156813d", // Web
         };
-    }
 
-    public class DismissAreaEffectAction : ContextAction
-    {
-        public override string GetCaption() => "Dismiss caster's area effect spell near target";
-
-        public override void RunAction()
+        internal static void NotifyPlayer(string message)
         {
-            var context = Context.SourceAbilityContext;
-            if (context == null) return;
+            // var target = Game.Instance.UI.SelectionManager.SelectedUnits.FirstOrDefault<UnitEntityData>() ?? Game.Instance.Player.MainCharacter;
+            // Game.Instance.UI.Bark(target, message);
 
-            DismissAreaEffectLogic.EndTargetAreaEffect(context.Caster, Target);
+            Game.Instance.UI.BattleLogManager.LogView.AddLogEntry(message, GameLogStrings.Instance.DefaultColor);
         }
     }
 }

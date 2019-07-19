@@ -28,10 +28,6 @@ namespace DismissAreaEffect
 
                 EnableGameLogging();
 
-                SafeLoad(Helpers.Load, "Initialization code");
-
-                SafeLoad(DismissAreaEffect.Load, "Ability to dismiss area effects");
-
 #if DEBUG
                 // Perform extra sanity checks in debug builds.
                 SafeLoad(CheckPatchingSuccess, "Check that all patches are used, and were loaded");
@@ -52,7 +48,7 @@ namespace DismissAreaEffect
                     {
                         if (Input.GetKeyUp("l"))
                         {
-                            Log.Write("Read key!");
+                            AreaEffectDismissal.DismissAreaEffects();
                         }
                     }
                 }
