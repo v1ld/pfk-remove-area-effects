@@ -1,23 +1,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using Kingmaker;
-using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Root.Strings.GameLog;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.PubSubSystem;
-using Kingmaker.UnitLogic;
-using Kingmaker.UnitLogic.Abilities;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
-using Kingmaker.UnitLogic.Abilities.Components.Base;
-using Kingmaker.UnitLogic.Mechanics.Actions;
-using Kingmaker.Utility;
-using static Kingmaker.UnitLogic.Commands.Base.UnitCommand;
 
-namespace DismissAreaEffect
+namespace DismissAreaEffects
 {
-    class AreaEffectDismissal
+    class DismissAreaEffects
     {
-        public static void DismissAreaEffects()
+        public static void Run()
         {
             if (Game.Instance.Player.IsInCombat)
             {

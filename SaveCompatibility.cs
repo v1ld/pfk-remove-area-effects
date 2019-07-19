@@ -11,7 +11,7 @@ using System.Text;
 using Kingmaker.Blueprints;
 using Newtonsoft.Json;
 
-namespace DismissAreaEffect
+namespace DismissAreaEffects
 {
   static class SaveCompatibility
     {

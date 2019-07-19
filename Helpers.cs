@@ -54,7 +54,7 @@ using UnityEngine;
 using static Kingmaker.UnitLogic.ActivatableAbilities.ActivatableAbilityResourceLogic;
 using static Kingmaker.UnitLogic.Commands.Base.UnitCommand;
 
-namespace DismissAreaEffect
+namespace DismissAreaEffects
 {
   static class ExtensionMethods
     {

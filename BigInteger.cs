@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 /** Based on BigInteger.cs by ScottGarland from http://biginteger.codeplex.com/ */
-namespace DismissAreaEffect
+namespace DismissAreaEffects
 {
     using DType = System.UInt32; // This could be UInt32, UInt16 or Byte; not UInt64.
 
