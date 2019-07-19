@@ -21,14 +21,14 @@ namespace DismissAreaEffect
         {
             if (Game.Instance.Player.IsInCombat)
             {
-                NotifyPlayer("Cannot dismiss area effects in combat.");
+                NotifyPlayer("Cannot dismiss area effects in combat.", true);
                 return;
             }
 
             var areaEffects = Game.Instance.State.AreaEffects.Where(area => IsAreaEffectSpell(area) && CanDismiss(area));
             if (areaEffects.Count() == 0)
             {
-                NotifyPlayer("No area effects to dismiss.");
+                NotifyPlayer("No area effects to dismiss.", true);
                 return;
             }
 
@@ -63,12 +63,16 @@ namespace DismissAreaEffect
             "fd323c05f76390749a8555b13156813d", // Web
         };
 
-        internal static void NotifyPlayer(string message)
+        internal static void NotifyPlayer(string message, bool warning = false)
         {
-            // var target = Game.Instance.UI.SelectionManager.SelectedUnits.FirstOrDefault<UnitEntityData>() ?? Game.Instance.Player.MainCharacter;
-            // Game.Instance.UI.Bark(target, message);
-
-            Game.Instance.UI.BattleLogManager.LogView.AddLogEntry(message, GameLogStrings.Instance.DefaultColor);
+            if (warning)
+            {
+                EventBus.RaiseEvent<IWarningNotificationUIHandler>((IWarningNotificationUIHandler h) => h.HandleWarning(message, true));
+            }
+            else
+            {
+                Game.Instance.UI.BattleLogManager.LogView.AddLogEntry(message, GameLogStrings.Instance.DefaultColor);
+            }
         }
     }
 }
