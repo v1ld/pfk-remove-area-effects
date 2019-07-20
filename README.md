@@ -1,7 +1,7 @@
 Dismiss Area Effect
 ===
 
-This mod adds a Dimiss Area Effect ability that can be used outside of combat.
+This mod adds a key to dismiss area effects, bound to "L" by default. It that can only be used outside of combat.  The combat log will show the results of using it.
 
 *Note: this was tested against the PF:K 2.0.5c.
 

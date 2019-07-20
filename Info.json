@@ -2,7 +2,7 @@
   "Id": "DismissAreaEffects",
   "DisplayName": "Dismiss Area Effects",
   "Author": "v1ld",
-  "Version": "0.2.0",
+  "Version": "0.3.0",
   "ManagerVersion": "0.12.2",
   "EntryMethod": "DismissAreaEffects.Main.Load",
   "HomePage": "https://github.com/v1ld/pfk-dismiss-area-effect",
