@@ -1,9 +1,9 @@
 {
     "Releases": [
         {
-            "Id": "DismissAreaEffect",
+            "Id": "RemoveAreaEffect",
             "Version": "0.3.0",
-            "DownloadUrl": "https://github.com/v1ld/pfk-dismiss-area-effect/releases/download/v0.3.0/DismissisAreaEffects.-.0.3.0.zip"
+            "DownloadUrl": "https://github.com/v1ld/pfk-remove-area-effects/releases/download/v0.3.0/RemoveAreaEffects.-.0.3.0.zip"
         }
     ]
 }

@@ -8,9 +8,9 @@ using Kingmaker.PubSubSystem;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
 using Kingmaker.UnitLogic.Parts;
 
-namespace DismissAreaEffects
+namespace RemoveAreaEffects
 {
-    class DismissAreaEffects
+    class RemoveAreaEffects
     {
         public static void Run()
         {

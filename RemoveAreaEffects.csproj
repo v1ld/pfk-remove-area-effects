@@ -9,14 +9,14 @@
     <Content Include="Helpers.cs" />
     <Content Include="Main.cs" />
     <Content Include="Repository.json" />
-    <Content Include="DismissAreaEffects.cs" />
+    <Content Include="RemoveAreaEffects.cs" />
     <Content Include="SaveCompatibility.cs" />
     <Content Include="CHANGELOG.md" />
   </ItemGroup>
   <PropertyGroup>
     <PostBuildEvent>
-    xcopy /y "$(SolutionDir)\bin\$(Configuration)\$(TargetFramework)\DismissAreaEffects.dll" "C:\Games\Steam\steamapps\common\Pathfinder Kingmaker\Mods\DismissAreaEffects\"
-    xcopy /y "$(SolutionDir)\Info.json" "C:\Games\Steam\steamapps\common\Pathfinder Kingmaker\Mods\DismissAreaEffects\"
+    xcopy /y "$(SolutionDir)\bin\$(Configuration)\$(TargetFramework)\RemoveAreaEffects.dll" "C:\Games\Steam\steamapps\common\Pathfinder Kingmaker\Mods\RemoveAreaEffects\"
+    xcopy /y "$(SolutionDir)\Info.json" "C:\Games\Steam\steamapps\common\Pathfinder Kingmaker\Mods\RemoveAreaEffects\"
     </PostBuildEvent>
   </PropertyGroup>
   <ItemGroup>

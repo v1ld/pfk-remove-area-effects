@@ -13,7 +13,7 @@ using Kingmaker.Utility;
 using UnityEngine;
 using UnityModManagerNet;
 
-namespace DismissAreaEffects
+namespace RemoveAreaEffects
 {
     public class Main
     {
@@ -48,7 +48,7 @@ namespace DismissAreaEffects
                     {
                         if (Input.GetKeyUp(settings.RemoveAreaEffectKey))
                         {
-                            DismissAreaEffects.Run();
+                            RemoveAreaEffects.Run();
                         }
                     }
                 }
