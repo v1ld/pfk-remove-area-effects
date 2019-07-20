@@ -1,11 +1,12 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Kingmaker;
-using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Root.Strings.GameLog;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.PubSubSystem;
 using Kingmaker.UnitLogic.Abilities.Blueprints;
+using Kingmaker.UnitLogic.Parts;
 
 namespace DismissAreaEffects
 {
@@ -13,28 +14,60 @@ namespace DismissAreaEffects
     {
         public static void Run()
         {
-            if (Game.Instance.Player.ControllableCharacters.Any(unit => unit.IsInCombat))
+            if (!(Main.settings.DismissAllowedInCombat && Main.settings.DismissInsteadOfWait))
             {
-                NotifyPlayer("Cannot dismiss area effects in combat.", true);
-                return;
+                if (Game.Instance.Player.ControllableCharacters.Any(unit => unit.IsInCombat))
+                {
+                    NotifyPlayer("Cannot remove area effects in combat.", true);
+                    return;
+                }
             }
 
             var areaEffects = Game.Instance.State.AreaEffects.Where(area => IsAreaEffectSpell(area) && CanDismiss(area));
             if (areaEffects.Count() == 0)
             {
-                NotifyPlayer("No area effects to dismiss.", true);
+                NotifyPlayer("No area effects to remove.", true);
                 return;
             }
 
-            foreach (var area in areaEffects)
+            if (Main.settings.DismissInsteadOfWait)
             {
-                area.ForceEnd();
+                DoDismissAreaEffects(areaEffects);
+            }
+            else
+            {
+                DoWaitOutAreaEffects(areaEffects);
             }
 
             var effectsCount = (from effect in areaEffects
                                 group effect by SpellNameForAreaEffect(effect.Blueprint.ToString()) into g
                                 select new { Effect = g.Key, Count = g.Count() }).ToDictionary(g => g.Effect, g => g.Count);
             NotifyPlayer($"Dismissed {SummarizeCountDictionary(effectsCount)} area effect" + (areaEffects.Count() == 1 ? "" : "s") + ".");
+        }
+
+        private static void DoDismissAreaEffects(IEnumerable<AreaEffectEntityData> areaEffects)
+        {
+            foreach (var area in areaEffects)
+            {
+                area.ForceEnd();
+            }
+        }
+
+        private static void DoWaitOutAreaEffects(IEnumerable<AreaEffectEntityData> areaEffects)
+        {
+            TimeSpan lastEndingTime = areaEffects.Max(area => Helpers.GetField<TimeSpan>(area, "m_CreationTime") + Helpers.GetField<TimeSpan>(area, "m_Duration"));
+            TimeSpan waitTime = lastEndingTime - Game.Instance.Player.GameTime;
+
+            Game.Instance.AdvanceGameTime(waitTime);
+
+            if (Main.settings.WaitingIgnoresFatigue)
+            {
+                int hours = waitTime.Hours + 1;
+                foreach (var character in Game.Instance.Player.Party)
+                {
+                    character.Ensure<UnitPartWeariness>().AddWearinessHours((float)(-hours));
+                }
+            }
         }
 
         static bool IsAreaEffectSpell(AreaEffectEntityData area) =>

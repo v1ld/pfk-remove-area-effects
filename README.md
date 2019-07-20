@@ -14,9 +14,14 @@ Installation:
 
 Credits
 ----
-This is built upon the Dismiss Area Effect Spell from [Eldritch Arcana](https://www.nexusmods.com/pathfinderkingmaker/mods/79), an excellent mod by Elmindra / [jennyem](https://github.com/jennyem/pathfinder-mods).  Her work is the majority of what is in this mod and I'm grateful she used the MIT license to share her work freely.
+This is built upon the Dismiss Area Effect Spell from [Eldritch Arcana](https://www.nexusmods.com/pathfinderkingmaker/mods/79), an excellent mod by Elmindra / [jennyem](https://github.com/jennyem/pathfinder-mods).
 
-Her original Credits from Eldritch Arcana follows:
+[Turn-Based Combat](https://www.nexusmods.com/pathfinderkingmaker/mods/109?tab=description) is the reason I bought this game.
+
+[Bag of Tricks](https://www.nexusmods.com/pathfinderkingmaker/mods/26) was useful both in testing and for some of the menu code.
+
+
+The original Credits from Eldritch Arcana follow as they cover the essentials rather well:
 
 I wanted to thank some other projects that made this mod possible.
 

@@ -46,7 +46,7 @@ namespace DismissAreaEffects
                 {
                     if (Game.Instance.CurrentMode == GameModeType.Default || Game.Instance.CurrentMode == GameModeType.Pause)
                     {
-                        if (Input.GetKeyUp("l"))
+                        if (Input.GetKeyUp(settings.RemoveAreaEffectKey))
                         {
                             DismissAreaEffects.Run();
                         }
@@ -152,11 +152,9 @@ namespace DismissAreaEffects
         static bool Load(UnityModManager.ModEntry modEntry)
         {
             logger = modEntry.Logger;
-#if false
             modEntry.OnToggle = OnToggle;
             modEntry.OnGUI = OnGUI;
             modEntry.OnSaveGUI = OnSaveGUI;
-#endif
             settings = UnityModManager.ModSettings.Load<Settings>(modEntry);
             harmonyInstance = Harmony12.HarmonyInstance.Create(modEntry.Info.Id);
             if (!ApplyPatch(typeof(LibraryScriptableObject_LoadDictionary_Patch), "All mod features"))
@@ -207,6 +205,42 @@ namespace DismissAreaEffects
                 }
                 GUILayout.EndVertical();
             }
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Remove area effects key: ", GUILayout.ExpandWidth(false));
+            SetKeyBinding(ref settings.RemoveAreaEffectKey);
+            GUILayout.EndHorizontal();
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Remove area effects mode: ", GUILayout.ExpandWidth(false));
+            settings.DismissInsteadOfWait = GUILayout.Toggle(settings.DismissInsteadOfWait,
+                "Wait until expired", fixedWidth);
+            settings.DismissInsteadOfWait = GUILayout.Toggle(!settings.DismissInsteadOfWait,
+                "Dismiss immediately", fixedWidth);
+            GUILayout.EndHorizontal();
+
+            GUI.enabled = settings.DismissInsteadOfWait;
+            settings.DismissAllowedInCombat = GUILayout.Toggle(settings.DismissAllowedInCombat,
+                "Dismiss mode may to be used in combat", fixedWidth);
+            GUI.enabled = true;
+
+            GUI.enabled = !settings.DismissInsteadOfWait;
+            settings.WaitingIgnoresFatigue = GUILayout.Toggle(settings.WaitingIgnoresFatigue,
+                "Waiting mode doesn't cause fatigue", fixedWidth);
+            GUI.enabled = true;
+        }
+
+        public static void SetKeyBinding(ref KeyCode keyCode)
+        {
+            string label = (keyCode == KeyCode.None) ? "Press a key" : keyCode.ToString();
+            if (GUILayout.Button(label, GUILayout.ExpandWidth(false)))
+            {
+                keyCode = KeyCode.None;
+            }
+            if (keyCode == KeyCode.None && Event.current != null && Event.current.isKey)
+            {
+                keyCode = Event.current.keyCode;
+            }
         }
 
         static void OnSaveGUI(UnityModManager.ModEntry modEntry)
@@ -251,6 +285,11 @@ namespace DismissAreaEffects
 
     public class Settings : UnityModManager.ModSettings
     {
+        public bool DismissInsteadOfWait = false;
+        public bool DismissAllowedInCombat = false;
+        public bool WaitingIgnoresFatigue = false;
+        public KeyCode RemoveAreaEffectKey = KeyCode.L;
+
         public override void Save(UnityModManager.ModEntry modEntry)
         {
             UnityModManager.ModSettings.Save<Settings>(this, modEntry);
