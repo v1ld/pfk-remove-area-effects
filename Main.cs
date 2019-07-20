@@ -31,7 +31,6 @@ namespace RemoveAreaEffects
 #if DEBUG
                 // Perform extra sanity checks in debug builds.
                 SafeLoad(CheckPatchingSuccess, "Check that all patches are used, and were loaded");
-                SafeLoad(SaveCompatibility.CheckCompat, "Check save game compatibility");
                 Log.Write("Load finished.");
 #endif
             }
@@ -149,6 +148,7 @@ namespace RemoveAreaEffects
             }
         }
 
+        // Mod entry point, invoked from UMM
         static bool Load(UnityModManager.ModEntry modEntry)
         {
             logger = modEntry.Logger;

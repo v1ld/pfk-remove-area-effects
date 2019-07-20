@@ -10,7 +10,6 @@
     <Content Include="Main.cs" />
     <Content Include="Repository.json" />
     <Content Include="RemoveAreaEffects.cs" />
-    <Content Include="SaveCompatibility.cs" />
     <Content Include="CHANGELOG.md" />
   </ItemGroup>
   <PropertyGroup>
