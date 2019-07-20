@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Kingmaker;
+using Kingmaker.Blueprints;
 using Kingmaker.Blueprints.Root.Strings.GameLog;
 using Kingmaker.EntitySystem.Entities;
 using Kingmaker.PubSubSystem;
@@ -25,14 +26,17 @@ namespace DismissAreaEffects
                 return;
             }
 
-            int count = 0;
             foreach (var area in areaEffects)
             {
                 area.ForceEnd();
-                count++;
             }
-            NotifyPlayer($"Dismissed {count} area effect" + (count == 1 ? "" : "s") + ".");
+
+            var effectsCount = (from effect in areaEffects
+                                group effect by SpellNameForAreaEffect(effect.Blueprint.ToString()) into g
+                                select new { Effect = g.Key, Count = g.Count() }).ToDictionary(g => g.Effect, g => g.Count);
+            NotifyPlayer($"Dismissed {SummarizeCountDictionary(effectsCount)} area effect" + (areaEffects.Count() == 1 ? "" : "s") + ".");
         }
+
         static bool IsAreaEffectSpell(AreaEffectEntityData area) =>
             area.Blueprint.AffectEnemies && area.Context.SourceAbility?.Type == AbilityType.Spell;
 
@@ -66,6 +70,36 @@ namespace DismissAreaEffects
             {
                 Game.Instance.UI.BattleLogManager.LogView.AddLogEntry(message, GameLogStrings.Instance.DefaultColor);
             }
+        }
+
+        // "1 Web, 2 Obsidian Flow and 1 Grease"
+        private static string SummarizeCountDictionary(Dictionary<string,int> counts)
+        {
+            string[] keys = counts.Keys.ToArray();
+            for (int i = 0; i < keys.Length; i++)
+            {
+                keys[i] = $"{counts[keys[i]]} {keys[i]}";
+            }
+            int n = keys.Length;
+            return n == 1 ? keys[0] : (string.Join(", ", keys, 0, n-1) + " and " + keys[n-1]);
+        }
+
+        // Put spaces before capitals and drop the last word
+        // "ObsidianFlowArea" => "Obsidian Flow"
+        private static string SpellNameForAreaEffect(string name)
+        {
+            char[] spaced = new char[name.Length * 2];
+            int last = 0, lastSpace = 0;
+            for (int i = 0; i < name.Length; ++i)
+            {
+                if (char.IsUpper(name[i]) && i > 0)
+                {
+                    lastSpace = last;
+                    spaced[last++] = ' ';
+                }
+                spaced[last++] = name[i];
+            }
+            return new string(spaced, 0, lastSpace);
         }
     }
 }
