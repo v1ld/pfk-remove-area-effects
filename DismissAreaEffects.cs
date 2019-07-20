@@ -12,7 +12,7 @@ namespace DismissAreaEffects
     {
         public static void Run()
         {
-            if (Game.Instance.Player.IsInCombat)
+            if (Game.Instance.Player.ControllableCharacters.Any(unit => unit.IsInCombat))
             {
                 NotifyPlayer("Cannot dismiss area effects in combat.", true);
                 return;
