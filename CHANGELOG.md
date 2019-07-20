@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2019-07-20
+### Added
+- Public release.
+- Wait time mode to expire area effects - is now the default mode.
+- Removed effects are summarized and reported in the Combat Log.
+- UMM Menu Options.
+- Option: Wait mode doesn't use fatigue (default: off).
+- Option: use Dismiss mode in combat (default: off).
+
+### Changed
+- Mod renamed to Remove Area Effects.
+
 ## [0.3.0] - 2019-07-19
 ### Added
 - New key binding to remove active area effects (L).

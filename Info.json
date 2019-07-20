@@ -2,7 +2,7 @@
   "Id": "RemoveAreaEffects",
   "DisplayName": "Remove Area Effects",
   "Author": "v1ld",
-  "Version": "0.3.0",
+  "Version": "1.0.0",
   "ManagerVersion": "0.12.2",
   "EntryMethod": "RemoveAreaEffects.Main.Load",
   "HomePage": "https://github.com/v1ld/pfk-remove-area-effects",
