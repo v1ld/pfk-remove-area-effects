@@ -11,7 +11,7 @@ Modes
 ----
 There are two modes for removal: **Wait** and **Dismiss**.
 1. **Wait**  In Wait mode your party will wait to where effects expire normally. Game time will skip forward to that point. There is an optional setting to prevent weariness from increasing in this mode (defaults to off).
-2. **Dismiss**  In Dismiss mode, all effects are immediately dismissed with no extra time passing.  There is an optional setting to allow this to be done in combat (defaults to off).
+2. **Dismiss**  In Dismiss mode, all effects are immediately dismissed with no extra time passing.
 
 Area Effects Removed
 ----
