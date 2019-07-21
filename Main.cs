@@ -228,6 +228,14 @@ namespace RemoveAreaEffects
             settings.WaitingIgnoresFatigue = GUILayout.Toggle(settings.WaitingIgnoresFatigue,
                 "Waiting mode doesn't cause fatigue", fixedWidth);
             GUI.enabled = true;
+
+#if DEBUG
+            GUILayout.Label("Debugging Tools", GUILayout.ExpandWidth(false));
+            if (GUILayout.Button("Log area effect abilities"))
+            {
+                Tools.dumpAreaEffects();
+            }
+#endif
         }
 
         public static void SetKeyBinding(ref KeyCode keyCode)
