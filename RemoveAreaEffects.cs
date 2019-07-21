@@ -1,3 +1,7 @@
+// Copyright (c) 2019 v1ld.git@gmail.com
+// Copyright (c) 2019 Jennifer Messerly
+// This code is licensed under MIT license (see LICENSE for details)
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,7 +46,7 @@ namespace RemoveAreaEffects
             var effectsCount = (from effect in areaEffects
                                 group effect by SpellNameForAreaEffect(effect.Blueprint.ToString()) into g
                                 select new { Effect = g.Key, Count = g.Count() }).ToDictionary(g => g.Effect, g => g.Count);
-            NotifyPlayer($"Dismissed {SummarizeCountDictionary(effectsCount)} area effect" + (areaEffects.Count() == 1 ? "" : "s") + ".");
+            NotifyPlayer($"Removed {SummarizeCountDictionary(effectsCount)} area effect" + (areaEffects.Count() == 1 ? "" : "s") + ".");
         }
 
         private static void DoDismissAreaEffects(IEnumerable<AreaEffectEntityData> areaEffects)
@@ -91,6 +95,36 @@ namespace RemoveAreaEffects
             "1d649d8859b25024888966ba1cc291d1", // Volcanic Storm
             "1f45c8b0a735097439a9dac04f5b0161", // Volcanic Storm (shadow)
             "fd323c05f76390749a8555b13156813d", // Web
+
+            // Kineticist infusions
+            "6ea87a0ff5df41c459d641326f9973d5", // CloudBlizzardBlastArea
+            "48aa66d1a15515e40b07bc1f5fb80f64", // CloudSandstormBlastArea
+            "35a62ad81dd5ae3478956c61d6cd2d2e", // CloudSteamBlastArea
+            "3659ce23ae102ca47a7bf3a30dd98609", // CloudThunderstormBlastArea
+            "4b19dd893a4b80a49905903bcd56b9e2", // DeadlyEarthEarthBlastArea
+            "c26aa67475bdb64449b0e0be6a9ea823", // DeadlyEarthMagmaBlastArea
+            "38a2979db34ad0f45a449e5eb174729f", // DeadlyEarthMetalBlastArea
+            "267f19ba174b21e4d9baf30afd589068", // DeadlyEarthMetalBlastAreaRare
+            "0af604484b5fcbb41b328750797e3948", // DeadlyEarthMudBlastArea
+            "2a90aa7f771677b4e9624fa77697fdc6", // WallAirBlastArea
+            "d12f759590ac61b40870a0725b92a985", // WallBlizzardBlastArea
+            "f3b3f32b7f9f35b4cb4114d633b6de6d", // WallBlueFlameBlastArea
+            "a4d33389f2b7b824889169d227cab729", // WallBlueFlameBlastAreaPure
+            "724d174829a1c1949a4a7ba99cfb06a0", // WallChargedWaterBlastArea
+            "2414e5c126976604584ebcee90395eee", // WallColdBlastArea
+            "af830491079fea141ad5f46e2dcf93cf", // WallEarthBlastArea
+            "740b3ba212b5bb448becf202a97cdbf4", // WallElectricBlastArea
+            "edb2896d49015434bbbe401ee27338c3", // WallFireBlastArea
+            "3b65f77ec33ab764592803685fe6891e", // WallIceBlastArea
+            "f92cdd3b43a744f4f8abeacb913c92fb", // WallMagmaBlastArea
+            "c6b4fc6e73c25de4f83378c959144dc8", // WallMetalBlastArea
+            "9a9895cbb91a15d48a0368ee8d0f650e", // WallMetalBlastAreaRare
+            "2cad16fcffefe3240b2d6dc3d33ff580", // WallMudBlastArea
+            "182de1c07ecb56d448cd6d3237ae4b81", // WallPlasmaBlastArea
+            "2eef9ca9e79968547a01d06d3828e17f", // WallSandstormBlastArea
+            "6a64cc20d5820dc4cb3907b36ce6ac13", // WallSteamBlastArea
+            "757b40456bbe27a46bbf18a57d64f31b", // WallThunderstormBlastArea
+            "bb4ddd5e7d64a4a49ba71fe8275d1553", // WallWaterBlastArea
         };
 
         internal static void NotifyPlayer(string message, bool warning = false)
