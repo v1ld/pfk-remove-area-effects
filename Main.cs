@@ -39,7 +39,7 @@ namespace RemoveAreaEffects
         [Harmony12.HarmonyPatch(typeof(UnityModManager.UI), "Update")]
         internal static class UnityModManager_UI_Update_Patch
         {
-            private static void Postfix(UnityModManager.UI __instance)
+            private static void Postfix()
             {
                 try
                 {
