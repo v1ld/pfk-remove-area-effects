@@ -7,14 +7,15 @@ This mod adds a key to remove area effects, bound to "L" by default but the key 
 
 There are two modes for the removal itself, one of which speeds up time passing until effects expire and the other directly removes the effects.  The former mode is exactly the same as waiting for the spell to expire in the game , but you don't lose real world time doing so - this is the default mode.
 
-Modes
+## Modes
 ----
 There are two modes for removal: **Wait** and **Dismiss**.
 1. **Wait**  In Wait mode your party will wait to where effects expire normally. Game time will skip forward to that point. There is an optional setting to prevent weariness from increasing in this mode (defaults to off).
 2. **Dismiss**  In Dismiss mode, all effects are immediately dismissed with no extra time passing.
 
-Area Effects Removed
+## Area Effects Handled
 ----
+### General
 - Blade Barrier
 - Cloak of Dreams
 - Entangle
@@ -29,6 +30,11 @@ Area Effects Removed
 - Volcanic Storm
 - Volcanic Storm (shadow)
 - Web
+### Kineticist
+- Cloud
+- Deadly Earth
+- Wall
+
 
 *Note*: *All* active area effects on the level that are in the list above will be removed.  No proximity or other checks are done.
 
