@@ -66,8 +66,6 @@ namespace RemoveAreaEffects
 
         internal static Settings settings;
 
-        static string testedGameVersion = "2.0.5c";
-
         static Harmony12.HarmonyInstance harmonyInstance;
 
         static readonly Dictionary<Type, bool> typesPatched = new Dictionary<Type, bool>();
@@ -181,10 +179,6 @@ namespace RemoveAreaEffects
             if (!enabled) return;
 
             var fixedWidth = new GUILayoutOption[1] { GUILayout.ExpandWidth(false) };
-            if (testedGameVersion != GameVersion.GetVersion())
-            {
-                GUILayout.Label($"<b>This mod was tested against game version {testedGameVersion}, but you are running {GameVersion.GetVersion()}.</b>", fixedWidth);
-            }
             if (failedPatches.Count > 0)
             {
                 GUILayout.BeginVertical();
@@ -205,6 +199,11 @@ namespace RemoveAreaEffects
                 }
                 GUILayout.EndVertical();
             }
+#if DEBUG
+            GUILayout.BeginVertical();
+            GUILayout.Label("<b>DEBUGging enabled.</b>", fixedWidth);
+            GUILayout.EndVertical();
+#endif
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Remove area effects key: ", GUILayout.ExpandWidth(false));
@@ -213,15 +212,13 @@ namespace RemoveAreaEffects
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Remove area effects mode: ", GUILayout.ExpandWidth(false));
-            settings.DismissInsteadOfWait = GUILayout.Toggle(settings.DismissInsteadOfWait,
-                "Wait until expired", fixedWidth);
-            settings.DismissInsteadOfWait = GUILayout.Toggle(!settings.DismissInsteadOfWait,
-                "Dismiss immediately", fixedWidth);
+            bool waitMode    = GUILayout.Toggle(!settings.DismissInsteadOfWait, "Wait until expired", fixedWidth);
+            bool dismissMode = GUILayout.Toggle(!waitMode, "Dismiss immediately", fixedWidth);
+            settings.DismissInsteadOfWait = dismissMode;
             GUILayout.EndHorizontal();
 
             GUI.enabled = !settings.DismissInsteadOfWait;
-            settings.WaitingIgnoresFatigue = GUILayout.Toggle(settings.WaitingIgnoresFatigue,
-                "Waiting mode doesn't cause fatigue", fixedWidth);
+            settings.WaitingIgnoresFatigue = GUILayout.Toggle(settings.WaitingIgnoresFatigue, "Waiting mode doesn't cause fatigue", fixedWidth);
             GUI.enabled = true;
 
 #if DEBUG

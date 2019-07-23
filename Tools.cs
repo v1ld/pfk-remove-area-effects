@@ -9,8 +9,6 @@ namespace RemoveAreaEffects
     {
         internal static void dumpAreaEffects()
         {
-            // area.Blueprint.AffectEnemies && area.Context.SourceAbility?.Type == AbilityType.Spell;
-
             foreach (var blueprint in Main.library.GetAllBlueprints())
             {
                 if (blueprint is BlueprintAbilityAreaEffect)
