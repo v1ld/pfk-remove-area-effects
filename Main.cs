@@ -217,6 +217,11 @@ namespace RemoveAreaEffects
             settings.DismissInsteadOfWait = dismissMode;
             GUILayout.EndHorizontal();
 
+            GUI.enabled = settings.DismissInsteadOfWait;
+            settings.DismissAllowedInCombat = GUILayout.Toggle(settings.DismissAllowedInCombat,
+                "Dismiss mode may to be used in combat", fixedWidth);
+            GUI.enabled = true;
+
             GUI.enabled = !settings.DismissInsteadOfWait;
             settings.WaitingIgnoresFatigue = GUILayout.Toggle(settings.WaitingIgnoresFatigue, "Waiting mode doesn't cause fatigue", fixedWidth);
             GUI.enabled = true;
@@ -286,6 +291,7 @@ namespace RemoveAreaEffects
     public class Settings : UnityModManager.ModSettings
     {
         public bool DismissInsteadOfWait = false;
+        public bool DismissAllowedInCombat = false;
         public bool WaitingIgnoresFatigue = false;
         public KeyCode RemoveAreaEffectKey = KeyCode.L;
 

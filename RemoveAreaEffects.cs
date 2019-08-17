@@ -18,10 +18,13 @@ namespace RemoveAreaEffects
     {
         public static void Run()
         {
-            if (Game.Instance.Player.ControllableCharacters.Any(unit => unit.IsInCombat))
+            if (!(Main.settings.DismissAllowedInCombat && Main.settings.DismissInsteadOfWait))
             {
-                NotifyPlayer("Cannot remove area effects in combat.", true);
-                return;
+                if (Game.Instance.Player.ControllableCharacters.Any(unit => unit.IsInCombat))
+                {
+                    NotifyPlayer("Cannot remove area effects in combat.", true);
+                    return;
+                }
             }
 
             var areaEffects = Game.Instance.State.AreaEffects.Where(area => CanDismiss(area));
