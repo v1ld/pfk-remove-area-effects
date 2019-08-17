@@ -11,22 +11,30 @@ There are two modes for the removal itself, one of which speeds up time passing 
 ----
 There are two modes for removal: **Wait** and **Dismiss**.
 1. **Wait**  In Wait mode your party will wait to where effects expire normally. Game time will skip forward to that point. There is an optional setting to prevent weariness from increasing in this mode (defaults to off).
-2. **Dismiss**  In Dismiss mode, all effects are immediately dismissed with no extra time passing.
+2. **Dismiss**  In Dismiss mode, all effects are immediately dismissed with no extra time passing.  This mode may be optionally used while in combat.
 
 ## Area Effects Handled
 ----
 ### General
+- Acid Fog
+- Acid Pit
 - Blade Barrier
 - Cloak of Dreams
+- Cloud Kill
+- Create Pit
 - Entangle
 - Grease
+- Hungry Pit
 - Ice Storm
 - Ice Storm (shadow)
 - Obscuring Mist
 - Obsidian Flow
+- Sickening Entanglement
 - Sirocco
 - Sirocco (shadow)
 - Spike Growth
+- Spiked Pit
+- Stinking Cloud
 - Volcanic Storm
 - Volcanic Storm (shadow)
 - Web
