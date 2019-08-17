@@ -24,7 +24,7 @@ namespace RemoveAreaEffects
                 return;
             }
 
-            var areaEffects = Game.Instance.State.AreaEffects.Where(area => IsAreaEffectSpell(area) && CanDismiss(area));
+            var areaEffects = Game.Instance.State.AreaEffects.Where(area => CanDismiss(area));
             if (areaEffects.Count() == 0)
             {
                 NotifyPlayer("No area effects to remove.", true);
@@ -78,17 +78,25 @@ namespace RemoveAreaEffects
             dismissibleAreas.Contains(area.Blueprint.AssetGuid);
 
         static readonly HashSet<string> dismissibleAreas = new HashSet<string> {
+            "f4dc3f53090627945b83f16ebf3146a6", // Acid Fog
+            "e122151e93e44e0488521aed9e51b617", // Acid Pit
             "cae4347a512809e4388fb3949dc0bc67", // Blade Barrier
             "6c116b31887c6284fbd41c070f6422f6", // Cloak of Dreams
+            "6df1ac314d4e6e9418e34470b79f90d8", // Cloud Kill
+            "cf742a1d377378e4c8799f6a3afff1ba", // Create Pit
             "bcb6329cefc66da41b011299a43cc681", // Entangle
             "d46313be45054b248a1f1656ddb38614", // Grease
+            "d086b1aeb367a5b43808d34c321955d1", // Hungry Pit
             "4c695315962bf9a4ea7fc7e2bb3e2f60", // Ice Storm
             "6b2b1ba6ec6487f46b8c76b603abba6b", // Ice Storm (shadow)
             "e09010a73354a794293ebc7b33c2d130", // Obscuring Mist
             "d64b08ae01012e34cbc55b3a27ea29b7", // Obsidian Flow
+            "72328360f1eeeb94d8a43d51db96eccb", // Sickening Entanglement
             "b21bc337e2beaa74b8823570cd45d6dd", // Sirocco
             "bb87c7513a16b9a44b4948a4e932a81b", // Sirocco (shadow)
             "16e0e4c6a16f68c49832340b93706499", // Spike Growth
+            "beccc33f543b1f8469c018982c23ac06", // Spiked Pit
+            "aa2e0a0fe89693f4e9205fd52c5ba3e5", // Stinking Cloud
             "1d649d8859b25024888966ba1cc291d1", // Volcanic Storm
             "1f45c8b0a735097439a9dac04f5b0161", // Volcanic Storm (shadow)
             "fd323c05f76390749a8555b13156813d", // Web
